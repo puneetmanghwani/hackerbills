@@ -4,6 +4,7 @@ import com.infinx.hacker_bills.pojo.dto.JsonResponse;
 import com.infinx.hacker_bills.pojo.model.Bill;
 import com.infinx.hacker_bills.service.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class BillController {
     @Autowired
     private BillService billService;
 
-    @PostMapping(value = "/")
+    @PostMapping(value = "")
     public JsonResponse addBill(@RequestBody Bill bill){
 
         bill = billService.saveBill(bill);
@@ -30,7 +31,7 @@ public class BillController {
 
     }
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "")
     public JsonResponse getAllBills(){
 
         List<Bill> bills = billService.findAllBills();
@@ -51,7 +52,7 @@ public class BillController {
     }
 
     @GetMapping(value = "/due/{dueDate}")
-    public JsonResponse getDueBills(@PathVariable(name = "dueDate") LocalDate dueDate){
+    public JsonResponse getDueBills(@PathVariable(name = "dueDate") @DateTimeFormat(pattern = "dd-MM-yy") LocalDate dueDate){
 
         List<Bill> dueBills = billService.findDueBills(dueDate);
         JsonResponse jsonResponse = new JsonResponse(true, "Due Bills", dueBills, HttpStatus.OK, 1);
