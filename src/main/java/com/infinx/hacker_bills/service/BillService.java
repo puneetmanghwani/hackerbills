@@ -1,11 +1,10 @@
 package com.infinx.hacker_bills.service;
 
+import com.infinx.hacker_bills.exception.BillException;
 import com.infinx.hacker_bills.pojo.model.Bill;
 import com.infinx.hacker_bills.repository.BillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,38 +17,47 @@ public class BillService {
     @Autowired
     private BillRepository billRepository;
 
+    /*
+    save the bill in database provided by user
+     */
     public Bill saveBill(Bill bill){
 
         billRepository.save(bill);
-
         return bill;
 
     }
 
-    public Bill getBill(String id){
+    /*
+    get the bills which have id provided by client
+     */
+    public Bill getBill(String id) throws BillException {
 
         Optional<Bill> bill = billRepository.findById(id);
 
         if(bill.isPresent()){
             return bill.get();
+        } else {
+            throw new BillException("Id not found", -1);
         }
-
-        return null;
 
     }
 
+    /*
+    get all the bills that exists
+     */
     public List<Bill> findAllBills(){
 
         List<Bill> bills = billRepository.findAll();
-
         return bills;
 
     }
 
+    /*
+    get the bills which have due date before the given date
+     */
     public List<Bill> findDueBills(LocalDate dueDate){
 
         List<Bill> dueBills = billRepository.getDueBillsByDate(dueDate);
-
         return dueBills;
 
     }

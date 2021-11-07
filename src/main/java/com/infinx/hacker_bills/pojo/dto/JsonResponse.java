@@ -22,6 +22,16 @@ public class JsonResponse {
     {
         timeStamp = LocalDateTime.now();
     }
+
+    public JsonResponse(boolean success, String msg, Object data, HttpStatus status, Integer code, String debugMessage) {
+        this.success = success;
+        this.msg = msg;
+        this.data = data;
+        this.status = status;
+        this.code = code;
+        this.debugMessage = debugMessage;
+    }
+
     public JsonResponse(boolean success, String msg, Object data, HttpStatus status, Integer code)
     {
         this();
