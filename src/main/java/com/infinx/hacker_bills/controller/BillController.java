@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -49,7 +48,7 @@ public class BillController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<JsonResponse> getBill(@PathVariable(name = "id") String id) throws BillException {
 
-        Bill bill = billService.getBill(id);
+        Bill bill = billService.findBill(id);
         JsonResponse jsonResponse = new JsonResponse(true, "Bills", bill, HttpStatus.OK, 1);
 
         return new ResponseEntity<>(jsonResponse, HttpStatus.OK);

@@ -14,7 +14,7 @@ echo "Graceful shutdown is not currently implemented... going to stop via kill -
 
 
 instance_id=1
-logRoot="/var/log/javaapps/sites-creation"
+logRoot="."
 
 logging_dir=$logRoot/$instance_id
 pid=`cat $logging_dir/pid.txt`

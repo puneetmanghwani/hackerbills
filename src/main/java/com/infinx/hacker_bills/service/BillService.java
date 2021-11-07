@@ -30,7 +30,7 @@ public class BillService {
     /*
     get the bills which have id provided by client
      */
-    public Bill getBill(String id) throws BillException {
+    public Bill findBill(String id) throws BillException {
 
         Optional<Bill> bill = billRepository.findById(id);
 
