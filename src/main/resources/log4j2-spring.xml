@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Properties>
+        <!--        <property name="FILE_SIZE">${bundle:application:max.file.size}</property>-->
+        <property name="FILE_SIZE">${sys:max.file.size:-1 GB}</property>
+        <property name="logFileName">${sys:log.file.name:-./logs/app.log}</property>
+        <property name="logFilePattern">${sys:log.file.pattern}</property>
+        <property name="consolePatternLayout">${sys:console.pattern:-}</property>
+        <property name="numberOfRolloverFiles">${sys:rollover.files:-1000}</property>
+        <property name="logLevel">${sys:log.level:-INFO}</property>
+
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="${consolePatternLayout}" />
+        </Console>
+
+        <RollingFile name="RollingFile"
+                     fileName="${logFileName}"
+                     filePattern="${logFilePattern}">
+            <PatternLayout>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level --- [%t]  %logger{36}         : %msg%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- rollover on startup, daily and when the file reaches
+                    10 MegaBytes -->
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy
+                        size="${FILE_SIZE}" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy max="${numberOfRolloverFiles}"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- LOG everything at INFO level -->
+        <Root level="${logLevel}">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" />
+        </Root>
+
+        <Logger name="com.infinx" level="trace"></Logger>
+    </Loggers>
+
+</Configuration>
