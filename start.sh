@@ -23,7 +23,7 @@ sizeOfLogFile="1024 MB"
 rollOverFiles=1000
 
 #as it is being deployed on heroku so
-logging_dir=./$instanceId
+logging_dir=./logs/$instanceId
 
 
 
@@ -54,7 +54,7 @@ logFileName="hackers_bills.log"
 echo -Dmax.file.size="$sizeOfLogFile"
 #exit 0
 
-nohup java -Dspring.cloud.config.uri=http://localhost:8085  -Dspring.profiles.active=$profile  -Dmax.file.size="$sizeOfLogFile" -DlogLevel=$logLevel -Dlog.file.name="$logging_dir/$logFileName" -Dlog.file.pattern="$logging_dir/\$\${date:yyyy-MM}/kafka-consumer-%d{yyyy-MM-dd}-%i.log.gz" -Drollover.files=$rollOverFiles -Dserver.port=$serverPort -Xmx2048m -jar ./build/libs/hacker_bills.jar > $logging_dir/out.txt 2>$logging_dir/err.txt  &
+nohup java -Dspring.cloud.config.uri=http://localhost:8085  -Dspring.profiles.active=$profile  -Dmax.file.size="$sizeOfLogFile" -DlogLevel=$logLevel -Dlog.file.name="$logging_dir/$logFileName" -Dlog.file.pattern="$logging_dir/\$\${date:yyyy-MM}/hacker-bills-%d{yyyy-MM-dd}-%i.log.gz" -Drollover.files=$rollOverFiles -Dserver.port=$serverPort -Xmx2048m -jar ./build/libs/hacker_bills.jar > $logging_dir/out.txt 2>$logging_dir/err.txt  &
 echo $! > $logging_dir/pid.txt
 
 if [ ! -f $logging_dir/$logFileName ]

@@ -7,16 +7,10 @@
 
 
 
-
-
-echo "Graceful shutdown is not currently implemented... going to stop via kill -9"
-#Todo - attempt shutdown via actuator's shutdown url, and wait.
-
-
 instance_id=1
 logRoot="."
 
-logging_dir=$logRoot/$instance_id
+logging_dir=$logRoot/logs/$instance_id
 pid=`cat $logging_dir/pid.txt`
 
 echo "Process pid: $pid"
@@ -38,6 +32,5 @@ else
 fi
 
 
-#Todo add condition for server up - also needs work in java.
 
 

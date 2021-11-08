@@ -59,6 +59,24 @@ bootJar {
 	archiveFileName = 'hacker_bills.jar'
 }
 
+task deploy(dependsOn: bootJar) {
+	doLast {
+		copy {
+			from "."
+			into "build/libs"
+			include "*.sh"
+		}
+
+		copy {
+			from "."
+			into "build/libs"
+			include "change_loglevel.sh"
+		}
+
+	}
+}
+
+
 
 test {
 	useJUnitPlatform()
