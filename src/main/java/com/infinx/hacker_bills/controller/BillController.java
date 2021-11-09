@@ -1,6 +1,7 @@
 package com.infinx.hacker_bills.controller;
 
 import com.infinx.hacker_bills.exception.BillException;
+import com.infinx.hacker_bills.pojo.dto.BillDTO;
 import com.infinx.hacker_bills.pojo.dto.JsonResponse;
 import com.infinx.hacker_bills.pojo.model.Bill;
 import com.infinx.hacker_bills.service.BillService;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -26,7 +28,9 @@ public class BillController {
     private static final Logger LOGGER = LoggerFactory.getLogger(BillController.class);
 
     @PostMapping(value = "")
-    public ResponseEntity<JsonResponse> addBill(@RequestBody Bill bill){
+    public ResponseEntity<JsonResponse> addBill(@Valid @RequestBody BillDTO billDTO){
+
+        Bill bill = billDTO.getBill(null);
 
         bill = billService.saveBill(bill);
         JsonResponse jsonResponse = new JsonResponse(true, "Bill Saved", bill, HttpStatus.OK, 1);

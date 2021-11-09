@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,21 @@ public class BillService {
      */
     public Bill saveBill(Bill bill){
 
+        /*
+        setting the total amount of bill so that if it is not included or entered wrong
+        then correct total amount will be set.
+         */
+        Double totalAmount = bill.getAmount() + bill.getTax();
+        bill.setTotalAmount(totalAmount);
+
+        billRepository.save(bill);
+//        bill = saveTransactional(bill);
+        return bill;
+
+    }
+
+    @Transactional
+    public Bill saveTransactional(Bill bill){
         billRepository.save(bill);
         return bill;
 
