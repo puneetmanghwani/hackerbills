@@ -1,8 +1,11 @@
 package com.infinx.hacker_bills.service;
 
+import com.infinx.hacker_bills.HackerBillsApplication;
 import com.infinx.hacker_bills.exception.BillException;
 import com.infinx.hacker_bills.pojo.model.Bill;
 import com.infinx.hacker_bills.repository.BillRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -18,6 +21,9 @@ public class BillService {
     @Autowired
     private BillRepository billRepository;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(BillService.class);
+
+
     /*
     save the bill in database provided by user
      */
@@ -27,18 +33,20 @@ public class BillService {
         setting the total amount of bill so that if it is not included or entered wrong
         then correct total amount will be set.
          */
-        Double totalAmount = bill.getAmount() + bill.getTax();
-        bill.setTotalAmount(totalAmount);
+        LOGGER.info("Saving "+ bill.toString());
 
-        billRepository.save(bill);
-//        bill = saveTransactional(bill);
-        return bill;
+        try {
+            Double totalAmount = bill.getAmount() + bill.getTax();
+            bill.setTotalAmount(totalAmount);
 
-    }
+            billRepository.save(bill);
 
-    @Transactional
-    public Bill saveTransactional(Bill bill){
-        billRepository.save(bill);
+            LOGGER.info("Bill saved");
+        } catch (Exception e){
+            LOGGER.error(e.getMessage());
+            throw e;
+        }
+
         return bill;
 
     }
@@ -48,12 +56,21 @@ public class BillService {
      */
     public Bill findBill(String id) throws BillException {
 
-        Optional<Bill> bill = billRepository.findById(id);
+        LOGGER.info("Finding bill with id " + id);
 
-        if(bill.isPresent()){
-            return bill.get();
-        } else {
-            throw new BillException("Id not found", -1);
+        try {
+            Optional<Bill> bill = billRepository.findById(id);
+
+            if(bill.isPresent()){
+                LOGGER.info("Bill found " + bill.get().toString());
+                return bill.get();
+            } else {
+                LOGGER.error("Bill not found");
+                throw new BillException("Id not found", -1);
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            throw e;
         }
 
     }
@@ -63,8 +80,15 @@ public class BillService {
      */
     public List<Bill> findAllBills(){
 
-        List<Bill> bills = billRepository.findAll();
-        return bills;
+        LOGGER.info("Finding all bills");
+
+        try {
+            List<Bill> bills = billRepository.findAll();
+            return bills;
+        } catch (Exception e){
+            LOGGER.error(e.getMessage());
+            throw  e;
+        }
 
     }
 
@@ -73,8 +97,15 @@ public class BillService {
      */
     public List<Bill> findDueBills(LocalDate dueDate){
 
-        List<Bill> dueBills = billRepository.getDueBillsByDate(dueDate);
-        return dueBills;
+        LOGGER.info("Finding bills having due date before " + dueDate);
+
+        try {
+            List<Bill> dueBills = billRepository.getDueBillsByDate(dueDate);
+            return dueBills;
+        } catch (Exception e){
+            LOGGER.error(e.getMessage());
+            throw e;
+        }
 
     }
 
